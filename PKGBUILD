@@ -327,7 +327,6 @@ build () {
        -D valgrind=true $_no_lto
        
     meson configure _build64
-    ninja  $NINJAFLAGS -C _build64
 
     # quoted from https://www.mesa3d.org/meson.html
     # Note: autotools automatically updated translation files (used by the DRI configuration tool) as part of the build process, Meson does not do this. 
