@@ -39,11 +39,11 @@ if [ -n "$_mesa_commit" ]; then
 fi
 
 pkgdesc="an open-source implementation of the OpenGL specification, git version"
-pkgver=20.1.0_devel.121640.e6097375269
+pkgver=20.1.0_devel.121577.e352e7e7926
 pkgrel=1
 arch=('x86_64')
 makedepends=('git' 'python-mako' 'xorgproto' 'libxml2' 'libx11' 'libvdpau' 'libva' 'elfutils'
-             'libomxil-bellagio' 'libxrandr' 'ocl-icd' 'vulkan-icd-loader' 'libgcrypt'  'wayland'
+             'libomxil-bellagio' 'libxrandr' 'ocl-icd' 'libgcrypt'  'wayland'
              'wayland-protocols' 'meson' 'ninja' 'libdrm' 'xorgproto' 'libdrm' 'libxshmfence' 
              'libxxf86vm' 'libxdamage' 'libclc' 'libglvnd' 'libunwind' 'lm_sensors' 'libxrandr'
              'valgrind' 'glslang')
@@ -52,12 +52,14 @@ if [ "$_lib32" == "true" ]; then
   makedepends+=('lib32-libxml2' 'lib32-libx11' 'lib32-libdrm' 'lib32-libxshmfence' 'lib32-libxxf86vm'
                 'lib32-gcc-libs' 'lib32-libvdpau' 'lib32-libelf' 'lib32-libgcrypt' 'lib32-systemd'
                 'lib32-lm_sensors' 'lib32-libxdamage' 'gcc-multilib' 'lib32-libunwind' 'lib32-libglvnd'
-                'lib32-libva' 'lib32-wayland' 'lib32-libvdpau' 'lib32-libxrandr' 'lib32-expat'
-                'lib32-vulkan-icd-loader')
+                'lib32-libva' 'lib32-wayland' 'lib32-libvdpau' 'lib32-libxrandr' 'lib32-expat')
 fi
 
 depends=('libdrm' 'libxxf86vm' 'libxdamage' 'libxshmfence' 'libelf' 'libomxil-bellagio' 'libunwind'
-         'libglvnd' 'wayland' 'lm_sensors' 'libclc' 'glslang')
+         'libglvnd' 'wayland' 'lm_sensors' 'libclc' 'glslang' 'zstd' 'vulkan-icd-loader')
+if [ "$_lib32" == "true" ]; then
+  depends+=('lib32-zstd' 'lib32-vulkan-icd-loader')
+fi
 optdepends=('opengl-man-pages: for the OpenGL API man pages')
 
 # Use ccache if available
@@ -148,7 +150,7 @@ user_patcher() {
 # NINJAFLAGS is an env var used to pass commandline options to ninja
 # NOTE: It's your responbility to validate the value of $NINJAFLAGS. If unsure, don't set it.
 
-# MESA_WHICH_LLVM is an environment variable used to determine which llvm package tree is used to build mesa-git against.
+# MESA_WHICH_LLVM is an environment variable that determines which llvm package tree is used to built mesa-git against.
 # Adding a line to ~/.bashrc  that sets this value is the simplest way to ensure a specific choice.
 #
 # 1: llvm-minimal-git (aur) preferred value
@@ -321,10 +323,18 @@ build () {
        -D osmesa=gallium \
        -D shared-glapi=true \
        -D opengl=true \
+       -D zstd=true \
        -D valgrind=true $_no_lto
        
     meson configure _build64
     ninja  $NINJAFLAGS -C _build64
+
+    # quoted from https://www.mesa3d.org/meson.html
+    # Note: autotools automatically updated translation files (used by the DRI configuration tool) as part of the build process, Meson does not do this. 
+    # Instead, you will need do this: 
+    ninja $NINJAFLAGS -C _build64 xmlpool-pot xmlpool-update-po xmlpool-gmo
+    #
+    ninja $NINJAFLAGS -C _build64
 
     if [ "$_localglesv2pc" == "true" ]; then
       echo -e "prefix=/usr\nlibdir=\${prefix}/lib\nincludedir=\${prefix}/include\n\nName: glesv2\nDescription: Mesa OpenGL ES 2.0 library\nVersion: ${pkgver}\nLibs: -L\${libdir} -lGLESv2\nLibs.private: -lpthread -pthread -lm -ldl\nCflags: -I\${includedir}" > "$srcdir"/_build64/glesv2.pc
@@ -368,9 +378,16 @@ build () {
           -D lmsensors=true \
           -D osmesa=gallium \
           -D shared-glapi=true \
+          -D zstd=true \
           -D valgrind=false $_no_lto
        
       meson configure _build32
+
+      # quoted from https://www.mesa3d.org/meson.html
+      # Note: autotools automatically updated translation files (used by the DRI configuration tool) as part of the build process, Meson does not do this. 
+      # Instead, you will need do this: 
+      ninja $NINJAFLAGS -C _build32 xmlpool-pot xmlpool-update-po xmlpool-gmo
+      #
       ninja $NINJAFLAGS -C _build32
 
       if [ "$_localglesv2pc" == "true" ]; then
