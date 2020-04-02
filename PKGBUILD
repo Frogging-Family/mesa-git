@@ -20,7 +20,7 @@ plain '    `:sdNNNNNNNNNNNNNNNNNNNNNNNNNds:`'
 plain '       `-+shdNNNNNNNNNNNNNNNdhs+-`'
 plain '             `.-:///////:-.`'
 
-_where=$PWD # track basedir as different Arch based distros are moving srcdir around
+_where="$PWD" # track basedir as different Arch based distros are moving srcdir around
 source "$_where"/customization.cfg
 
 # Load external configuration file if present. Available variable values will overwrite customization.cfg ones.
