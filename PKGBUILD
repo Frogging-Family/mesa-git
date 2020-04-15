@@ -39,7 +39,7 @@ if [ -n "$_mesa_commit" ]; then
 fi
 
 pkgdesc="an open-source implementation of the OpenGL specification, git version"
-pkgver=20.1.0_devel.122074.bb7e44a23db
+pkgver=20.1.0_devel.122279.471fd41e84e
 pkgrel=1
 arch=('x86_64')
 makedepends=('git' 'python-mako' 'xorgproto' 'libxml2' 'libx11' 'libvdpau' 'libva' 'elfutils'
@@ -241,6 +241,9 @@ prepare() {
 
     # Community patches
     if [ -n "$_community_patches" ]; then
+      if [ ! -d "$_where/../community-patches" ]; then
+        cd "$_where/.." && git clone https://github.com/Frogging-Family/community-patches.git && cd "$srcdir"/$_mesa_srcdir
+      fi
       _community_patches=($_community_patches)
       for _p in ${_community_patches[@]}; do
         ln -s "$_where"/../community-patches/mesa-git/$_p "$_where"/
