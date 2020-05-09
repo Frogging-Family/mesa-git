@@ -39,7 +39,7 @@ if [ -n "$_mesa_commit" ]; then
 fi
 
 pkgdesc="an open-source implementation of the OpenGL specification, git version"
-pkgver=20.2.0_devel.123371.ae4379d81e4
+pkgver=20.2.0_devel.123551.e622e010fd8
 pkgrel=1
 arch=('x86_64')
 makedepends=('git' 'python-mako' 'xorgproto' 'libxml2' 'libx11' 'libvdpau' 'libva' 'elfutils'
@@ -304,6 +304,7 @@ build () {
        -D gallium-drivers=${_gallium_drivers} \
        -D vulkan-drivers=${_vulkan_drivers} \
        -D vulkan-overlay-layer=true \
+       -D vulkan-device-select-layer=true \
        -D swr-arches=avx,avx2 \
        -D dri3=true \
        -D egl=true \
@@ -359,6 +360,8 @@ build () {
           -D dri-drivers=${_dri_drivers} \
           -D gallium-drivers=${_gallium_drivers} \
           -D vulkan-drivers=${_vulkan_drivers} \
+          -D vulkan-overlay-layer=true \
+          -D vulkan-device-select-layer=true \
           -D swr-arches=avx,avx2 \
           -D dri3=true \
           -D egl=true \
@@ -433,7 +436,7 @@ package_lib32-mesa-tkg-git() {
   depends=('lib32-libdrm' 'lib32-libxxf86vm' 'lib32-libxdamage' 'lib32-libxshmfence'
            'lib32-lm_sensors' 'lib32-libelf' 'lib32-llvm-libs' 'lib32-wayland'
            'lib32-libglvnd' 'lib32-libx11' 'mesa')
-  provides=(lib32-mesa=$pkgver-$pkgrel lib32-vulkan-intel=$pkgver-$pkgrel lib32-vulkan-radeon=$pkgver-$pkgrel lib32-vulkan-mesa-layer=$pkgver-$pkgrel lib32-mesa-vulkan-layer=$pkgver-$pkgrel lib32-libva-mesa-driver=$pkgver-$pkgrel lib32-mesa-vdpau=$pkgver-$pkgrel lib32-opengl-driver lib32-ati-dri lib32-intel-dri lib32-nouveau-dri lib32-mesa-dri lib32-mesa-libgl)
+  provides=(lib32-mesa=$pkgver-$pkgrel lib32-vulkan-intel=$pkgver-$pkgrel lib32-vulkan-radeon=$pkgver-$pkgrel lib32-vulkan-mesa-layer=$pkgver-$pkgrel lib32-mesa-vulkan-layer=$pkgver-$pkgrel lib32-libva-mesa-driver=$pkgver-$pkgrel lib32-mesa-vdpau=$pkgver-$pkgrel lib32-opengl-driver lib32-vulkan-driver lib32-ati-dri lib32-intel-dri lib32-nouveau-dri lib32-mesa-dri lib32-mesa-libgl)
   conflicts=('lib32-mesa' 'lib32-vulkan-intel' 'lib32-vulkan-radeon' 'lib32-vulkan-mesa-layer' 'lib32-mesa-vulkan-layer' 'lib32-libva-mesa-driver' 'lib32-mesa-vdpau')
 
   DESTDIR="$pkgdir" ninja $NINJAFLAGS -C _build32 install
@@ -444,6 +447,7 @@ package_lib32-mesa-tkg-git() {
   rm -rf "$pkgdir"/usr/share/glvnd/
   rm -rf "$pkgdir"/usr/share/drirc.d/
   rm -rf "$pkgdir"/usr/share/vulkan/explicit_layer.d/
+  rm -rf "$pkgdir"/usr/share/vulkan/implicit_layer.d/VkLayer_MESA_device_select.json
 
   # indirect rendering
   ln -s /usr/lib32/libGLX_mesa.so.0 "${pkgdir}/usr/lib32/libGLX_indirect.so.0"
