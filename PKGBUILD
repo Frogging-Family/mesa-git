@@ -39,7 +39,7 @@ if [ -n "$_mesa_commit" ]; then
 fi
 
 pkgdesc="an open-source implementation of the OpenGL specification, git version"
-pkgver=20.2.0_devel.123587.f7fcbe9830d
+pkgver=20.2.0_devel.123805.fd6a5e112aa
 pkgrel=1
 arch=('x86_64')
 makedepends=('git' 'python-mako' 'xorgproto' 'libxml2' 'libx11' 'libvdpau' 'libva' 'elfutils'
@@ -292,6 +292,11 @@ build () {
       export _no_lto="-D b_lto=false"
     else
       export _no_lto=""
+    fi
+
+    if [ -n "${CUSTOM_GCC_PATH}" ]; then
+      PATH="${CUSTOM_GCC_PATH}/bin:${CUSTOM_GCC_PATH}/lib:${CUSTOM_GCC_PATH}/include:${PATH}"
+      msg2 "CUSTOM_GCC_PATH = ${CUSTOM_GCC_PATH}"
     fi
 
     export CC="gcc"
