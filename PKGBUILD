@@ -39,7 +39,7 @@ if [ -n "$_mesa_commit" ]; then
 fi
 
 pkgdesc="an open-source implementation of the OpenGL specification, git version"
-pkgver=20.2.0_devel.123989.d0e11231a4f
+pkgver=20.2.0_devel.124523.a21966837ac
 pkgrel=1
 arch=('x86_64')
 makedepends=('git' 'python-mako' 'xorgproto' 'libxml2' 'libx11' 'libvdpau' 'libva' 'elfutils'
@@ -311,29 +311,29 @@ build () {
        -D vulkan-overlay-layer=true \
        -D vulkan-device-select-layer=true \
        -D swr-arches=avx,avx2 \
-       -D dri3=true \
-       -D egl=true \
+       -D dri3=enabled \
+       -D egl=enabled \
        -D gallium-extra-hud=true \
        -D gallium-nine=true \
        -D gallium-omx=bellagio \
        -D gallium-opencl=icd \
-       -D gallium-va=true \
-       -D gallium-vdpau=true \
-       -D gallium-xa=true \
-       -D gallium-xvmc=false \
-       -D gbm=true \
-       -D gles1=false \
-       -D gles2=true \
+       -D gallium-va=enabled \
+       -D gallium-vdpau=enabled \
+       -D gallium-xa=enabled \
+       -D gallium-xvmc=disabled \
+       -D gbm=enabled \
+       -D gles1=disabled \
+       -D gles2=enabled \
        -D glvnd=true \
        -D glx=dri \
-       -D libunwind=true \
-       -D llvm=true \
-       -D lmsensors=true \
+       -D libunwind=enabled \
+       -D llvm=enabled \
+       -D lmsensors=enabled \
        -D osmesa=gallium \
-       -D shared-glapi=true \
+       -D shared-glapi=enabled \
        -D opengl=true \
-       -D zstd=true \
-       -D valgrind=true $_no_lto
+       -D zstd=enabled \
+       -D valgrind=enabled $_no_lto
        
     meson configure _build64
 
@@ -368,28 +368,28 @@ build () {
           -D vulkan-overlay-layer=true \
           -D vulkan-device-select-layer=true \
           -D swr-arches=avx,avx2 \
-          -D dri3=true \
-          -D egl=true \
+          -D dri3=enabled \
+          -D egl=enabled \
           -D gallium-extra-hud=true \
           -D gallium-nine=true \
           -D gallium-omx=disabled \
           -D gallium-opencl=disabled \
-          -D gallium-va=true \
-          -D gallium-vdpau=true \
-          -D gallium-xa=true \
-          -D gallium-xvmc=false \
-          -D gbm=true \
-          -D gles1=false \
-          -D gles2=true \
+          -D gallium-va=enabled \
+          -D gallium-vdpau=enabled \
+          -D gallium-xa=enabled \
+          -D gallium-xvmc=disabled \
+          -D gbm=enabled \
+          -D gles1=disabled \
+          -D gles2=enabled \
           -D glvnd=true \
           -D glx=dri \
-          -D libunwind=false \
-          -D llvm=true \
-          -D lmsensors=true \
+          -D libunwind=disabled \
+          -D llvm=enabled \
+          -D lmsensors=enabled \
           -D osmesa=gallium \
-          -D shared-glapi=true \
-          -D zstd=true \
-          -D valgrind=false $_no_lto
+          -D shared-glapi=enabled \
+          -D zstd=enabled \
+          -D valgrind=disabled $_no_lto
        
       meson configure _build32
 
