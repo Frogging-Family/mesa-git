@@ -39,7 +39,7 @@ if [ -n "$_mesa_commit" ]; then
 fi
 
 pkgdesc="an open-source implementation of the OpenGL specification, git version"
-pkgver=20.2.0_devel.124523.a21966837ac
+pkgver=20.2.0_devel.125023.ec628aba76e
 pkgrel=1
 arch=('x86_64')
 makedepends=('git' 'python-mako' 'xorgproto' 'libxml2' 'libx11' 'libvdpau' 'libva' 'elfutils'
@@ -229,6 +229,9 @@ prepare() {
     cd "$srcdir"/$_mesa_srcdir
     git reset --hard HEAD
     git clean -xdf
+    if [ -n "$_mesa_commit" ]; then
+      git checkout ${_mesa_commit}
+    fi
     msg2 "Tree cleaned"
 
     cp "$_where"/mesa-userpatches/*.mymesa* "$_where" || true # copy userpatches inside the PKGBUILD's dir
