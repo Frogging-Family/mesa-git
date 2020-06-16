@@ -297,6 +297,15 @@ build () {
       export _no_lto=""
     fi
 
+    if ( cd "$srcdir/$_mesa_srcdir" && git merge-base --is-ancestor 138c003d22739b0d1e6860ed398dd511a44cde04 HEAD ); then
+      _enabled_="enabled"
+      _disabled_="disabled"
+    else
+      _enabled_="true"
+      _disabled_="false"
+    fi
+
+
     if [ -n "${CUSTOM_GCC_PATH}" ]; then
       PATH="${CUSTOM_GCC_PATH}/bin:${CUSTOM_GCC_PATH}/lib:${CUSTOM_GCC_PATH}/include:${PATH}"
       msg2 "CUSTOM_GCC_PATH = ${CUSTOM_GCC_PATH}"
@@ -314,29 +323,29 @@ build () {
        -D vulkan-overlay-layer=true \
        -D vulkan-device-select-layer=true \
        -D swr-arches=avx,avx2 \
-       -D dri3=enabled \
-       -D egl=enabled \
+       -D dri3=${_enabled_} \
+       -D egl=${_enabled_} \
        -D gallium-extra-hud=true \
        -D gallium-nine=true \
        -D gallium-omx=bellagio \
        -D gallium-opencl=icd \
-       -D gallium-va=enabled \
-       -D gallium-vdpau=enabled \
-       -D gallium-xa=enabled \
-       -D gallium-xvmc=disabled \
-       -D gbm=enabled \
-       -D gles1=disabled \
-       -D gles2=enabled \
+       -D gallium-va=${_enabled_} \
+       -D gallium-vdpau=${_enabled_} \
+       -D gallium-xa=${_enabled_} \
+       -D gallium-xvmc=${_disabled_} \
+       -D gbm=${_enabled_} \
+       -D gles1=${_disabled_} \
+       -D gles2=${_enabled_} \
        -D glvnd=true \
        -D glx=dri \
-       -D libunwind=enabled \
-       -D llvm=enabled \
-       -D lmsensors=enabled \
+       -D libunwind=${_enabled_} \
+       -D llvm=${_enabled_} \
+       -D lmsensors=${_enabled_} \
        -D osmesa=gallium \
-       -D shared-glapi=enabled \
+       -D shared-glapi=${_enabled_} \
        -D opengl=true \
-       -D zstd=enabled \
-       -D valgrind=enabled $_no_lto
+       -D zstd=${_enabled_} \
+       -D valgrind=${_enabled_} $_no_lto
        
     meson configure _build64
 
@@ -371,28 +380,28 @@ build () {
           -D vulkan-overlay-layer=true \
           -D vulkan-device-select-layer=true \
           -D swr-arches=avx,avx2 \
-          -D dri3=enabled \
-          -D egl=enabled \
+          -D dri3=${_enabled_} \
+          -D egl=${_enabled_} \
           -D gallium-extra-hud=true \
           -D gallium-nine=true \
-          -D gallium-omx=disabled \
-          -D gallium-opencl=disabled \
-          -D gallium-va=enabled \
-          -D gallium-vdpau=enabled \
-          -D gallium-xa=enabled \
-          -D gallium-xvmc=disabled \
-          -D gbm=enabled \
-          -D gles1=disabled \
-          -D gles2=enabled \
+          -D gallium-omx=${_disabled_} \
+          -D gallium-opencl=${_disabled_} \
+          -D gallium-va=${_enabled_} \
+          -D gallium-vdpau=${_enabled_} \
+          -D gallium-xa=${_enabled_} \
+          -D gallium-xvmc=${_disabled_} \
+          -D gbm=${_enabled_} \
+          -D gles1=${_disabled_} \
+          -D gles2=${_enabled_} \
           -D glvnd=true \
           -D glx=dri \
-          -D libunwind=disabled \
-          -D llvm=enabled \
-          -D lmsensors=enabled \
+          -D libunwind=${_disabled_} \
+          -D llvm=${_enabled_} \
+          -D lmsensors=${_enabled_} \
           -D osmesa=gallium \
-          -D shared-glapi=enabled \
-          -D zstd=enabled \
-          -D valgrind=disabled $_no_lto
+          -D shared-glapi=${_enabled_} \
+          -D zstd=${_enabled_} \
+          -D valgrind=${_disabled_} $_no_lto
        
       meson configure _build32
 
