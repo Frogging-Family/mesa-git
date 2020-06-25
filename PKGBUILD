@@ -39,7 +39,7 @@ if [ -n "$_mesa_commit" ]; then
 fi
 
 pkgdesc="an open-source implementation of the OpenGL specification, git version"
-pkgver=20.2.0_devel.125342.20e12d9ef4e
+pkgver=20.2.0_devel.125426.7e98f2534c3
 pkgrel=1
 arch=('x86_64')
 makedepends=('git' 'python-mako' 'xorgproto' 'libxml2' 'libx11' 'libvdpau' 'libva' 'elfutils'
@@ -484,11 +484,19 @@ package_lib32-mesa-tkg-git() {
 
   install -Dt "$pkgdir"/usr/share/licenses/$pkgname "$srcdir"/LICENSE
 
-  msg2 '#############################################################################################'
-  msg2 ''
-  msg2 '   Reminder: You can enable ACO at runtime with the `RADV_PERFTEST=aco` environment variable.'
-  msg2 ''
-  msg2 '#############################################################################################'
+  if ( cd "$srcdir/$_mesa_srcdir" && ! git merge-base --is-ancestor 63e1e7209c2bf7d8bbce18380d4f1b2cff4c0bbb HEAD ); then
+    msg2 '#############################################################################################'
+    msg2 ''
+    msg2 '   Reminder: You can enable ACO at runtime with the `RADV_PERFTEST=aco` environment variable.'
+    msg2 ''
+    msg2 '#############################################################################################'
+  else
+    msg2 '#############################################################################################'
+    msg2 ''
+    msg2 '   Reminder: You can disable ACO at runtime with the `RADV_DEBUG=llvm` environment variable.'
+    msg2 ''
+    msg2 '#############################################################################################'
+  fi
 }
  
 trap exit_cleanup EXIT
