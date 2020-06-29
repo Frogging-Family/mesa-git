@@ -39,7 +39,7 @@ if [ -n "$_mesa_commit" ]; then
 fi
 
 pkgdesc="an open-source implementation of the OpenGL specification, git version"
-pkgver=20.2.0_devel.125426.7e98f2534c3
+pkgver=20.2.0_devel.125531.849227d70f3
 pkgrel=1
 arch=('x86_64')
 makedepends=('git' 'python-mako' 'xorgproto' 'libxml2' 'libx11' 'libvdpau' 'libva' 'elfutils'
@@ -173,10 +173,10 @@ case $MESA_WHICH_LLVM in
     1)
         # aur llvm-minimal-git
         makedepends+=('llvm-minimal-git')
-        depends+=('llvm-libs-minimal-git')
+        _llvm='llvm-libs-minimal-git'
         if [ "$_lib32" == "true" ]; then
           makedepends+=('lib32-llvm-minimal-git')
-          depends+=('lib32-llvm-libs-minimal-git')
+          _lib32_llvm='lib32-llvm-libs-minimal-git'
         fi
         msg2 "Using llvm-minimal-git (AUR)"
         echo "Using llvm-minimal-git (AUR)" >> "$_where"/last_build_config.log
@@ -185,10 +185,10 @@ case $MESA_WHICH_LLVM in
         # aur llvm-git
         # depending on aur-llvm-* to avoid mixup with LH llvm-git
         makedepends+=('aur-llvm-git')
-        depends+=('aur-llvm-libs-git')
+        _llvm='aur-llvm-libs-git'
         if [ "$_lib32" == "true" ]; then
           makedepends+=('aur-lib32-llvm-git')
-          depends+=('aur-lib32-llvm-libs-git')
+          _lib32_llvm='aur-lib32-llvm-libs-git'
         fi
         msg2 "Using llvm-git (AUR)"
         echo "Using llvm-git (AUR)" >> "$_where"/last_build_config.log
@@ -196,10 +196,10 @@ case $MESA_WHICH_LLVM in
     3)
         # mesa-git/llvm-git (lordheavy unofficial repo)
         makedepends+=('llvm-git' 'clang-git')
-        depends+=('llvm-libs-git')
+        _llvm='llvm-libs-git'
         if [ "$_lib32" == "true" ]; then
           makedepends+=('lib32-llvm-git')
-          depends+=('lib32-llvm-libs-git')
+          _lib32_llvm='lib32-llvm-libs-git'
         fi
         msg2 "Using llvm-git from LordHeavy unofficial repo"
         echo "Using llvm-git from LordHeavy unofficial repo" >> "$_where"/last_build_config.log
@@ -207,10 +207,10 @@ case $MESA_WHICH_LLVM in
     4)
         # extra/llvm
         makedepends+=('llvm>=8.0.0' 'clang>=8.0.0')
-        depends+=('llvm-libs>=8.0.0')
+        _llvm='llvm-libs>=8.0.0'
         if [ "$_lib32" == "true" ]; then
           makedepends+=('lib32-llvm>=8.0.0')
-          depends+=('lib32-llvm-libs>=8.0.0')
+          _lib32_llvm='lib32-llvm-libs>=8.0.0'
         fi
         msg2 "Using llvm (default)"
         echo "Using llvm (default)" >> "$_where"/last_build_config.log
@@ -427,8 +427,8 @@ build () {
 
 package_mesa-tkg-git() {
   depends=('libdrm' 'wayland' 'libxxf86vm' 'libxdamage' 'libxshmfence' 'libelf'
-           'libomxil-bellagio' 'libunwind' 'llvm-libs' 'lm_sensors' 'libglvnd'
-           'expat' 'libclc' 'libx11')
+           'libomxil-bellagio' 'libunwind' 'lm_sensors' 'libglvnd'
+           'expat' 'libclc' 'libx11' $_llvm)
   provides=(mesa=$pkgver-$pkgrel vulkan-intel=$pkgver-$pkgrel vulkan-radeon=$pkgver-$pkgrel vulkan-mesa-layer=$pkgver-$pkgrel mesa-vulkan-layer=$pkgver-$pkgrel libva-mesa-driver=$pkgver-$pkgrel mesa-vdpau=$pkgver-$pkgrel vulkan-driver opencl-mesa=$pkgver-$pkgrel opengl-driver opencl-driver ati-dri intel-dri nouveau-dri svga-dri mesa-dri mesa-libgl)
   conflicts=('mesa' 'opencl-mesa' 'vulkan-intel' 'vulkan-radeon' 'vulkan-mesa-layer' 'mesa-vulkan-layer' 'libva-mesa-driver' 'mesa-vdpau')
 
@@ -455,8 +455,8 @@ package_mesa-tkg-git() {
 
 package_lib32-mesa-tkg-git() {
   depends=('lib32-libdrm' 'lib32-libxxf86vm' 'lib32-libxdamage' 'lib32-libxshmfence'
-           'lib32-lm_sensors' 'lib32-libelf' 'lib32-llvm-libs' 'lib32-wayland'
-           'lib32-libglvnd' 'lib32-libx11' 'mesa')
+           'lib32-lm_sensors' 'lib32-libelf' 'lib32-wayland'
+           'lib32-libglvnd' 'lib32-libx11' 'mesa' $_lib32_llvm)
   provides=(lib32-mesa=$pkgver-$pkgrel lib32-vulkan-intel=$pkgver-$pkgrel lib32-vulkan-radeon=$pkgver-$pkgrel lib32-vulkan-mesa-layer=$pkgver-$pkgrel lib32-mesa-vulkan-layer=$pkgver-$pkgrel lib32-libva-mesa-driver=$pkgver-$pkgrel lib32-mesa-vdpau=$pkgver-$pkgrel lib32-opengl-driver lib32-vulkan-driver lib32-ati-dri lib32-intel-dri lib32-nouveau-dri lib32-mesa-dri lib32-mesa-libgl)
   conflicts=('lib32-mesa' 'lib32-vulkan-intel' 'lib32-vulkan-radeon' 'lib32-vulkan-mesa-layer' 'lib32-mesa-vulkan-layer' 'lib32-libva-mesa-driver' 'lib32-mesa-vdpau')
 
