@@ -39,7 +39,7 @@ if [ -n "$_mesa_commit" ]; then
 fi
 
 pkgdesc="an open-source implementation of the OpenGL specification, git version"
-pkgver=20.2.0_devel.125531.849227d70f3
+pkgver=20.2.0_devel.125696.9e2afe4f05a
 pkgrel=1
 arch=('x86_64')
 makedepends=('git' 'python-mako' 'xorgproto' 'libxml2' 'libx11' 'libvdpau' 'libva' 'elfutils'
@@ -331,7 +331,7 @@ build () {
        -D gallium-opencl=icd \
        -D gallium-va=${_enabled_} \
        -D gallium-vdpau=${_enabled_} \
-       -D gallium-xa=${_enabled_} \
+       -D gallium-xa=${_gallium_xa} \
        -D gallium-xvmc=${_disabled_} \
        -D gbm=${_enabled_} \
        -D gles1=${_disabled_} \
@@ -390,7 +390,7 @@ build () {
           -D gallium-opencl=${_disabled_} \
           -D gallium-va=${_enabled_} \
           -D gallium-vdpau=${_enabled_} \
-          -D gallium-xa=${_enabled_} \
+          -D gallium-xa=${_gallium_xa} \
           -D gallium-xvmc=${_disabled_} \
           -D gbm=${_enabled_} \
           -D gles1=${_disabled_} \
