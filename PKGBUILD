@@ -39,7 +39,7 @@ if [ -n "$_mesa_commit" ]; then
 fi
 
 pkgdesc="an open-source implementation of the OpenGL specification, git version"
-pkgver=20.2.0_devel.125952.36abb0c6918
+pkgver=20.2.0_devel.126110.787c1ed2096
 pkgrel=1
 arch=('x86_64')
 makedepends=('git' 'python-mako' 'xorgproto' 'libxml2' 'libx11' 'libvdpau' 'libva' 'elfutils'
@@ -50,7 +50,7 @@ makedepends=('git' 'python-mako' 'xorgproto' 'libxml2' 'libx11' 'libvdpau' 'libv
 
 if [ "$_lib32" == "true" ]; then
   makedepends+=('lib32-libxml2' 'lib32-libx11' 'lib32-libdrm' 'lib32-libxshmfence' 'lib32-libxxf86vm'
-                'lib32-gcc-libs' 'lib32-libvdpau' 'lib32-libelf' 'lib32-libgcrypt' 'lib32-systemd'
+                'lib32-gcc-libs' 'lib32-libvdpau' 'lib32-libelf' 'lib32-libgcrypt'
                 'lib32-lm_sensors' 'lib32-libxdamage' 'gcc-multilib' 'lib32-libunwind' 'lib32-libglvnd'
                 'lib32-libva' 'lib32-wayland' 'lib32-libvdpau' 'lib32-libxrandr' 'lib32-expat')
 fi
