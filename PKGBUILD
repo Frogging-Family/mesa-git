@@ -35,7 +35,7 @@ fi
 
 # custom mesa commit to pass to git
 if [ -n "$_mesa_commit" ]; then
-  _mesa_commit="#commit=${_mesa_commit}"
+  _mesa_version="#commit=${_mesa_commit}"
 fi
 
 pkgdesc="an open-source implementation of the OpenGL specification, git version"
@@ -75,7 +75,7 @@ options=(${_makepkg_options[@]})
 url="https://www.mesa3d.org"
 license=('custom')
 
-_sourceurl="mesa::git://anongit.freedesktop.org/mesa/mesa${_mesa_commit}"
+_sourceurl="mesa::git://anongit.freedesktop.org/mesa/mesa${_mesa_version}"
 _mesa_srcdir="mesa"
 
 source=("$_sourceurl"
@@ -230,7 +230,7 @@ prepare() {
     git reset --hard HEAD
     git clean -xdf
     if [ -n "$_mesa_commit" ]; then
-      git checkout ${_mesa_commit}
+      git checkout "${_mesa_commit}"
     fi
     msg2 "Tree cleaned"
 
