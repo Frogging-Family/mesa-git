@@ -331,7 +331,7 @@ build () {
        -D gallium-opencl=icd \
        -D gallium-va=${_enabled_} \
        -D gallium-vdpau=${_enabled_} \
-       -D gallium-xa=${_enabled_} \
+       -D gallium-xa=${_gallium_xa} \
        -D gallium-xvmc=${_disabled_} \
        -D gbm=${_enabled_} \
        -D gles1=${_disabled_} \
@@ -390,7 +390,7 @@ build () {
           -D gallium-opencl=${_disabled_} \
           -D gallium-va=${_enabled_} \
           -D gallium-vdpau=${_enabled_} \
-          -D gallium-xa=${_enabled_} \
+          -D gallium-xa=${_gallium_xa} \
           -D gallium-xvmc=${_disabled_} \
           -D gbm=${_enabled_} \
           -D gles1=${_disabled_} \
