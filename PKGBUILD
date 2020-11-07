@@ -313,9 +313,9 @@ build () {
     fi
 
     if ( cd "$srcdir/$_mesa_srcdir" && git merge-base --is-ancestor e00adef34a5ce485e2c9216a268ca05e89a5fc98 HEAD ); then
-      _platforms="x11,wayland,drm,surfaceless"
-    else
       _platforms="x11,wayland"
+    else
+      _platforms="x11,wayland,drm,surfaceless"
     fi
     # /Selector fixes
 
