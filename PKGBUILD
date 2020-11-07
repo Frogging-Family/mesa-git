@@ -39,7 +39,7 @@ if [ -n "$_mesa_commit" ]; then
 fi
 
 pkgdesc="an open-source implementation of the OpenGL specification, git version"
-pkgver=20.3.0_devel.127653.d2cf6a8399e
+pkgver=20.3.0_devel.130849.b7793e39ee4
 pkgrel=1
 arch=('x86_64')
 makedepends=('git' 'python-mako' 'xorgproto' 'libxml2' 'libx11' 'libvdpau' 'libva' 'elfutils'
@@ -297,6 +297,7 @@ build () {
       export _no_lto=""
     fi
 
+    # Selector fixes
     if ( cd "$srcdir/$_mesa_srcdir" && git merge-base --is-ancestor 138c003d22739b0d1e6860ed398dd511a44cde04 HEAD ); then
       _enabled_="enabled"
       _disabled_="disabled"
@@ -305,6 +306,18 @@ build () {
       _disabled_="false"
     fi
 
+    if [ "$_gallium_xa" = "false" ] || [ "$_gallium_xa" = "disabled" ]; then
+      _gallium_xa="${_disabled_}"
+    else
+      _gallium_xa="${_enabled_}"
+    fi
+
+    if ( cd "$srcdir/$_mesa_srcdir" && git merge-base --is-ancestor e00adef34a5ce485e2c9216a268ca05e89a5fc98 HEAD ); then
+      _platforms="x11,wayland,drm,surfaceless"
+    else
+      _platforms="x11,wayland"
+    fi
+    # /Selector fixes
 
     if [ -n "${CUSTOM_GCC_PATH}" ]; then
       PATH="${CUSTOM_GCC_PATH}/bin:${CUSTOM_GCC_PATH}/lib:${CUSTOM_GCC_PATH}/include:${PATH}"
@@ -316,7 +329,7 @@ build () {
 
     arch-meson $_mesa_srcdir _build64 \
        -D b_ndebug=true \
-       -D platforms=x11,wayland,drm,surfaceless \
+       -D platforms=${_platforms} \
        -D dri-drivers=${_dri_drivers} \
        -D gallium-drivers=${_gallium_drivers} \
        -D vulkan-drivers=${_vulkan_drivers} \
@@ -375,7 +388,7 @@ build () {
           --native-file llvm32.native \
           --libdir=/usr/lib32 \
           -D b_ndebug=true \
-          -D platforms=x11,wayland,drm,surfaceless \
+          -D platforms=${_platforms} \
           -D dri-drivers=${_dri_drivers} \
           -D gallium-drivers=${_gallium_drivers} \
           -D vulkan-drivers=${_vulkan_drivers} \
