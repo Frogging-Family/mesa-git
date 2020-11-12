@@ -39,7 +39,7 @@ if [ -n "$_mesa_commit" ]; then
 fi
 
 pkgdesc="an open-source implementation of the OpenGL specification, git version"
-pkgver=20.3.0_devel.130849.b7793e39ee4
+pkgver=21.0.0_devel.131000.f89b29f708c
 pkgrel=1
 arch=('x86_64')
 makedepends=('git' 'python-mako' 'xorgproto' 'libxml2' 'libx11' 'libvdpau' 'libva' 'elfutils'
@@ -298,6 +298,7 @@ build () {
     fi
 
     # Selector fixes
+    # Syntax legacy compat
     if ( cd "$srcdir/$_mesa_srcdir" && git merge-base --is-ancestor 138c003d22739b0d1e6860ed398dd511a44cde04 HEAD ); then
       _enabled_="enabled"
       _disabled_="disabled"
@@ -305,13 +306,37 @@ build () {
       _enabled_="true"
       _disabled_="false"
     fi
-
     if [ "$_gallium_xa" = "false" ] || [ "$_gallium_xa" = "disabled" ]; then
       _gallium_xa="${_disabled_}"
     else
       _gallium_xa="${_enabled_}"
     fi
 
+    # gallium_vdpau requires either r300, r600, radeonsi or nouveau
+    if [[ $_gallium_drivers != *r300* ]] && [[ $_gallium_drivers != *r600* ]] && [[ $_gallium_drivers != *radeonsi* ]] && [[ $_gallium_drivers != *nouveau* ]]; then
+      warning "Gallium VDPAU disabled (gallium driver r300, r600, radeonsi or nouveau required)"
+      _gallium_vdpau="${_disabled_}"
+    else
+      _gallium_vdpau="${_enabled_}"
+    fi
+
+    # gallium_va requires either r600, radeonsi or nouveau
+    if [[ $_gallium_drivers != *r600* ]] && [[ $_gallium_drivers != *radeonsi* ]] && [[ $_gallium_drivers != *nouveau* ]]; then
+      warning "Gallium VA disabled (gallium driver r600, radeonsi or nouveau required)"
+      _gallium_va="${_disabled_}"
+    else
+      _gallium_va="${_enabled_}"
+    fi
+
+    # gallium_omx requires either r600, radeonsi or nouveau
+    if [[ $_gallium_drivers != *r600* ]] && [[ $_gallium_drivers != *radeonsi* ]] && [[ $_gallium_drivers != *nouveau* ]]; then
+      warning "Gallium OMX disabled (gallium driver r600, radeonsi or nouveau required)"
+      _gallium_omx="${_disabled_}"
+    else
+      _gallium_omx="bellagio"
+    fi
+
+    # legacy compat
     if ( cd "$srcdir/$_mesa_srcdir" && git merge-base --is-ancestor e00adef34a5ce485e2c9216a268ca05e89a5fc98 HEAD ); then
       _platforms="x11,wayland"
     else
@@ -340,10 +365,10 @@ build () {
        -D egl=${_enabled_} \
        -D gallium-extra-hud=true \
        -D gallium-nine=true \
-       -D gallium-omx=bellagio \
+       -D gallium-omx=${_gallium_omx} \
        -D gallium-opencl=icd \
-       -D gallium-va=${_enabled_} \
-       -D gallium-vdpau=${_enabled_} \
+       -D gallium-va=${_gallium_va} \
+       -D gallium-vdpau=${_gallium_vdpau} \
        -D gallium-xa=${_gallium_xa} \
        -D gallium-xvmc=${_disabled_} \
        -D gbm=${_enabled_} \
@@ -401,8 +426,8 @@ build () {
           -D gallium-nine=true \
           -D gallium-omx=${_disabled_} \
           -D gallium-opencl=${_disabled_} \
-          -D gallium-va=${_enabled_} \
-          -D gallium-vdpau=${_enabled_} \
+          -D gallium-va=${_gallium_va} \
+          -D gallium-vdpau=${_gallium_vdpau} \
           -D gallium-xa=${_gallium_xa} \
           -D gallium-xvmc=${_disabled_} \
           -D gbm=${_enabled_} \
