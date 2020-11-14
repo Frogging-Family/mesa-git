@@ -39,7 +39,7 @@ if [ -n "$_mesa_commit" ]; then
 fi
 
 pkgdesc="an open-source implementation of the OpenGL specification, git version"
-pkgver=21.0.0_devel.131000.f89b29f708c
+pkgver=21.0.0_devel.131097.f0c8645cb93
 pkgrel=1
 arch=('x86_64')
 makedepends=('git' 'python-mako' 'xorgproto' 'libxml2' 'libx11' 'libvdpau' 'libva' 'elfutils'
@@ -75,7 +75,7 @@ options=(${_makepkg_options[@]})
 url="https://www.mesa3d.org"
 license=('custom')
 
-_sourceurl="mesa::git://anongit.freedesktop.org/mesa/mesa${_mesa_version}"
+_sourceurl="mesa::git+https://gitlab.freedesktop.org/mesa/mesa.git${_mesa_version}"
 _mesa_srcdir="mesa"
 
 source=("$_sourceurl"
