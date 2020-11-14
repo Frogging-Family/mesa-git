@@ -39,8 +39,8 @@ if [ -n "$_mesa_commit" ]; then
 fi
 
 pkgdesc="an open-source implementation of the OpenGL specification, git version"
-pkgver=21.0.0_devel.131097.f0c8645cb93
-pkgrel=1
+pkgver=21.0.0_devel.131098.f7b122728d5
+pkgrel=2
 arch=('x86_64')
 makedepends=('git' 'python-mako' 'xorgproto' 'libxml2' 'libx11' 'libvdpau' 'libva' 'elfutils'
              'libomxil-bellagio' 'libxrandr' 'ocl-icd' 'libgcrypt'  'wayland'
@@ -344,13 +344,18 @@ build () {
     fi
     # /Selector fixes
 
-    if [ -n "${CUSTOM_GCC_PATH}" ]; then
+    if [ -n "${CUSTOM_GCC_PATH}" ] && [ "$_compiler" != "clang" ]; then
       PATH="${CUSTOM_GCC_PATH}/bin:${CUSTOM_GCC_PATH}/lib:${CUSTOM_GCC_PATH}/include:${PATH}"
       msg2 "CUSTOM_GCC_PATH = ${CUSTOM_GCC_PATH}"
     fi
 
-    export CC="gcc"
-    export CXX="g++"
+    if [ "$_compiler" = "clang" ]; then
+      export CC="clang"
+      export CXX="clang++"
+    else
+      export CC="gcc"
+      export CXX="g++"
+    fi
 
     arch-meson $_mesa_srcdir _build64 \
        -D b_ndebug=true \
@@ -405,8 +410,13 @@ build () {
 
     if [ "$_lib32" == "true" ]; then
       cd "$srcdir"
-      export CC="gcc -m32"
-      export CXX="g++ -m32"
+      if [ "$_compiler" = "clang" ]; then
+        export CC="clang -m32"
+        export CXX="clang++ -m32"
+      else
+        export CC="gcc -m32"
+        export CXX="g++ -m32"
+      fi
       export PKG_CONFIG=/usr/bin/i686-pc-linux-gnu-pkg-config
 
       arch-meson $_mesa_srcdir _build32 \
