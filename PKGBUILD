@@ -383,7 +383,7 @@ build () {
        -D shared-glapi=${_enabled_} \
        -D opengl=true \
        -D zstd=${_enabled_} \
-       -D valgrind=${_enabled_} $_no_lto
+       -D valgrind=${_enabled_} $_no_lto $_additional_meson_flags
        
     meson configure _build64
 
@@ -441,7 +441,7 @@ build () {
           -D osmesa=gallium \
           -D shared-glapi=${_enabled_} \
           -D zstd=${_enabled_} \
-          -D valgrind=${_disabled_} $_no_lto
+          -D valgrind=${_disabled_} $_no_lto $_additional_meson_flags
        
       meson configure _build32
 
