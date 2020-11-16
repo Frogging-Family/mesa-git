@@ -219,14 +219,14 @@ case $MESA_WHICH_LLVM in
 esac
 
 pkgver() {
-    cd $_mesa_srcdir
+    cd "$_mesa_srcdir"
     read -r _ver <VERSION
     echo ${_ver/-/_}.$(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
     # cleanups
-    cd "$srcdir"/$_mesa_srcdir
+    cd "$srcdir/$_mesa_srcdir"
     git reset --hard HEAD
     git clean -xdf
     if [ -n "$_mesa_commit" ]; then
@@ -277,10 +277,18 @@ prepare() {
     # although removing _build folder in build() function feels more natural,
     # that interferes with the spirit of makepkg --noextract
     if [  -d _build64 ]; then
+      if [[ "$_additional_meson_flags" = *-Db_pgo=use* ]]; then
+        find ./_build64 -type f ! -name '*.gcda' -delete
+      else
         rm -rf _build64
+      fi
     fi
     if [  -d _build32 ]; then
+      if [[ "$_additional_meson_flags" = *-Db_pgo=use* ]]; then
+        find ./_build32 -type f ! -name '*.gcda' -delete
+      else
         rm -rf _build32
+      fi
     fi
     cd "$_where"
 }
