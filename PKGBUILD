@@ -39,7 +39,7 @@ if [ -n "$_mesa_commit" ]; then
 fi
 
 pkgdesc="an open-source implementation of the OpenGL specification, git version"
-pkgver=21.0.0_devel.131349.bac6cc586fe
+pkgver=21.0.0_devel.131687.b14679ab226
 pkgrel=1
 arch=('x86_64')
 makedepends=('git' 'python-mako' 'xorgproto' 'libxml2' 'libx11' 'libvdpau' 'libva' 'elfutils'
@@ -350,6 +350,11 @@ build () {
     else
       _platforms="x11,wayland,drm,surfaceless"
     fi
+
+    # microsoft clc
+    if ( cd "$srcdir/$_mesa_srcdir" && git merge-base --is-ancestor a5227465c13ae74651a932a82aeae65683f4a063 HEAD ); then
+      _microsoft_clc="-D microsoft-clc=${_disabled_}"
+    fi
     # /Selector fixes
 
     if [ -n "${CUSTOM_GCC_PATH}" ] && [ "$_compiler" != "clang" ]; then
@@ -396,7 +401,7 @@ build () {
        -D shared-glapi=${_enabled_} \
        -D opengl=true \
        -D zstd=${_enabled_} \
-       -D valgrind=${_enabled_} $_no_lto $_additional_meson_flags
+       -D valgrind=${_enabled_} $_microsoft_clc $_no_lto $_additional_meson_flags
        
     meson configure _build64
 
@@ -459,7 +464,7 @@ build () {
           -D osmesa=gallium \
           -D shared-glapi=${_enabled_} \
           -D zstd=${_enabled_} \
-          -D valgrind=${_disabled_} $_no_lto $_additional_meson_flags
+          -D valgrind=${_disabled_} $_microsoft_clc $_no_lto $_additional_meson_flags
        
       meson configure _build32
 
