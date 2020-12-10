@@ -39,7 +39,7 @@ if [ -n "$_mesa_commit" ]; then
 fi
 
 pkgdesc="an open-source implementation of the OpenGL specification, git version"
-pkgver=21.0.0_devel.131687.b14679ab226
+pkgver=21.0.0_devel.132226.ac0d393eb18
 pkgrel=1
 arch=('x86_64')
 makedepends=('git' 'python-mako' 'xorgproto' 'libxml2' 'libx11' 'libvdpau' 'libva' 'elfutils'
@@ -355,6 +355,13 @@ build () {
     if ( cd "$srcdir/$_mesa_srcdir" && git merge-base --is-ancestor a5227465c13ae74651a932a82aeae65683f4a063 HEAD ); then
       _microsoft_clc="-D microsoft-clc=${_disabled_}"
     fi
+
+    # osmesa post ee802372
+    if ( cd "$srcdir/$_mesa_srcdir" && git merge-base --is-ancestor ee802372180a2b4460cc7abb53438e45c6b6f1e4 HEAD ); then
+      _osmesa="true"
+    else
+      _osmesa="gallium"
+    fi
     # /Selector fixes
 
     if [ -n "${CUSTOM_GCC_PATH}" ] && [ "$_compiler" != "clang" ]; then
@@ -397,7 +404,7 @@ build () {
        -D libunwind=${_enabled_} \
        -D llvm=${_enabled_} \
        -D lmsensors=${_enabled_} \
-       -D osmesa=gallium \
+       -D osmesa=${_osmesa} \
        -D shared-glapi=${_enabled_} \
        -D opengl=true \
        -D zstd=${_enabled_} \
@@ -461,7 +468,7 @@ build () {
           -D libunwind=${_disabled_} \
           -D llvm=${_enabled_} \
           -D lmsensors=${_enabled_} \
-          -D osmesa=gallium \
+          -D osmesa=${_osmesa} \
           -D shared-glapi=${_enabled_} \
           -D zstd=${_enabled_} \
           -D valgrind=${_disabled_} $_microsoft_clc $_no_lto $_additional_meson_flags
