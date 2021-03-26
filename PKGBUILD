@@ -39,7 +39,7 @@ if [ -n "$_mesa_commit" ]; then
 fi
 
 pkgdesc="an open-source implementation of the OpenGL specification, git version"
-pkgver=21.0.0_devel.132226.ac0d393eb18
+pkgver=21.1.0_devel.137110.a3ee818b790
 pkgrel=1
 arch=('x86_64')
 makedepends=('git' 'python-mako' 'xorgproto' 'libxml2' 'libx11' 'libvdpau' 'libva' 'elfutils'
@@ -362,6 +362,13 @@ build () {
     else
       _osmesa="gallium"
     fi
+
+    # layer selector
+    if ( cd "$srcdir/$_mesa_srcdir" && git merge-base --is-ancestor 54fe5b0482df0f066384b274796d4081c2a1968c HEAD ); then
+      _layers="-D vulkan-layers=device-select,overlay"
+    else
+      _layers="-D vulkan-overlay-layer=true -D vulkan-device-select-layer=true"
+    fi
     # /Selector fixes
 
     if [ -n "${CUSTOM_GCC_PATH}" ] && [ "$_compiler" != "clang" ]; then
@@ -383,8 +390,6 @@ build () {
        -D dri-drivers=${_dri_drivers} \
        -D gallium-drivers=${_gallium_drivers} \
        -D vulkan-drivers=${_vulkan_drivers} \
-       -D vulkan-overlay-layer=true \
-       -D vulkan-device-select-layer=true \
        -D swr-arches=avx,avx2 \
        -D dri3=${_enabled_} \
        -D egl=${_enabled_} \
@@ -408,7 +413,7 @@ build () {
        -D shared-glapi=${_enabled_} \
        -D opengl=true \
        -D zstd=${_enabled_} \
-       -D valgrind=${_enabled_} $_microsoft_clc $_no_lto $_additional_meson_flags
+       -D valgrind=${_enabled_} $_microsoft_clc $_layers $_no_lto $_additional_meson_flags
        
     meson configure _build64
 
@@ -447,8 +452,6 @@ build () {
           -D dri-drivers=${_dri_drivers} \
           -D gallium-drivers=${_gallium_drivers} \
           -D vulkan-drivers=${_vulkan_drivers} \
-          -D vulkan-overlay-layer=true \
-          -D vulkan-device-select-layer=true \
           -D swr-arches=avx,avx2 \
           -D dri3=${_enabled_} \
           -D egl=${_enabled_} \
@@ -471,7 +474,7 @@ build () {
           -D osmesa=${_osmesa} \
           -D shared-glapi=${_enabled_} \
           -D zstd=${_enabled_} \
-          -D valgrind=${_disabled_} $_microsoft_clc $_no_lto $_additional_meson_flags
+          -D valgrind=${_disabled_} $_microsoft_clc $_layers $_no_lto $_additional_meson_flags
        
       meson configure _build32
 
