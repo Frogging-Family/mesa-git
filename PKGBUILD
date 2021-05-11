@@ -36,10 +36,12 @@ fi
 # custom mesa commit to pass to git
 if [ -n "$_mesa_commit" ]; then
   _mesa_version="#commit=${_mesa_commit}"
+else
+  _mesa_version="#branch=${_mesa_branch}"
 fi
 
 pkgdesc="an open-source implementation of the OpenGL specification, git version"
-pkgver=21.1.0_devel.137403.ce1a381e57d
+pkgver=21.2.0_devel.139470.584145ea882
 pkgrel=1
 arch=('x86_64')
 makedepends=('git' 'python-mako' 'xorgproto' 'libxml2' 'libx11' 'libvdpau' 'libva' 'elfutils'
