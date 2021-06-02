@@ -77,7 +77,7 @@ options=(${_makepkg_options[@]})
 url="https://www.mesa3d.org"
 license=('custom')
 
-_sourceurl="mesa::git+https://gitlab.freedesktop.org/mesa/mesa.git${_mesa_version}"
+_sourceurl="mesa::git+${_mesa_source}${_mesa_version}"
 _mesa_srcdir="mesa"
 
 source=("$_sourceurl"
