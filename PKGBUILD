@@ -41,7 +41,7 @@ else
 fi
 
 pkgdesc="an open-source implementation of the OpenGL specification, git version"
-pkgver=21.2.0_devel.139470.584145ea882
+pkgver=21.3.0_devel.142827.f3ec4a934d6
 pkgrel=1
 arch=('x86_64')
 makedepends=('git' 'python-mako' 'xorgproto' 'libxml2' 'libx11' 'libvdpau' 'libva' 'elfutils'
@@ -278,14 +278,14 @@ prepare() {
 
     # although removing _build folder in build() function feels more natural,
     # that interferes with the spirit of makepkg --noextract
-    if [  -d _build64 ]; then
+    if [  -d _build64 ] && [ "$_NUKR" != "false" ]; then
       if [[ "$_additional_meson_flags" = *-Db_pgo=use* ]]; then
         find ./_build64 -type f ! -name '*.gcda' -delete
       else
         rm -rf _build64
       fi
     fi
-    if [  -d _build32 ]; then
+    if [  -d _build32 ] && [ "$_NUKR" != "false" ]; then
       if [[ "$_additional_meson_flags" = *-Db_pgo=use* ]]; then
         find ./_build32 -type f ! -name '*.gcda' -delete
       else
