@@ -41,14 +41,14 @@ else
 fi
 
 pkgdesc="an open-source implementation of the OpenGL specification, git version"
-pkgver=22.0.0_devel.147095.01d36149cdd
+pkgver=22.0.0_devel.147698.e914a6710fd
 pkgrel=1
 arch=('x86_64')
 makedepends=('git' 'python-mako' 'xorgproto' 'libxml2' 'libx11' 'libvdpau' 'libva' 'elfutils'
              'libomxil-bellagio' 'libxrandr' 'ocl-icd' 'libgcrypt'  'wayland'
              'wayland-protocols' 'meson' 'ninja' 'libdrm' 'xorgproto' 'libdrm' 'libxshmfence' 
              'libxxf86vm' 'libxdamage' 'libclc' 'libglvnd' 'libunwind' 'lm_sensors' 'libxrandr'
-             'valgrind' 'glslang')
+             'valgrind' 'glslang' 'byacc' 'wget' 'flex' 'bison')
 
 if [ "$_lib32" == "true" ]; then
   makedepends+=('lib32-libxml2' 'lib32-libx11' 'lib32-libdrm' 'lib32-libxshmfence' 'lib32-libxxf86vm'
@@ -227,6 +227,11 @@ pkgver() {
 }
 
 prepare() {
+    # dri drivers moved to the amber branch
+    if [ "$_mesa_branch" = "main" ]; then
+      _dri_drivers=""
+    fi
+
     # cleanups
     cd "$srcdir/$_mesa_srcdir"
     git reset --hard HEAD
