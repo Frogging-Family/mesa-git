@@ -41,7 +41,7 @@ else
 fi
 
 pkgdesc="an open-source implementation of the OpenGL specification, git version"
-pkgver=22.0.0_devel.147698.e914a6710fd
+pkgver=22.0.0_devel.147902.c50bdacbda6
 pkgrel=1
 arch=('x86_64')
 makedepends=('git' 'python-mako' 'xorgproto' 'libxml2' 'libx11' 'libvdpau' 'libva' 'elfutils'
@@ -357,6 +357,9 @@ build () {
     else
       _platforms="x11,wayland,drm,surfaceless"
     fi
+    if ( cd "$srcdir/$_mesa_srcdir" && ! git merge-base --is-ancestor e2de00876a7033b6923f912af8d2b0bbd100e113 HEAD ); then
+      _legacy_switches="-D swr-arches=avx,avx2"
+    fi
 
     # microsoft clc
     if ( cd "$srcdir/$_mesa_srcdir" && git merge-base --is-ancestor a5227465c13ae74651a932a82aeae65683f4a063 HEAD ); then
@@ -397,7 +400,6 @@ build () {
        -D dri-drivers=${_dri_drivers} \
        -D gallium-drivers=${_gallium_drivers} \
        -D vulkan-drivers=${_vulkan_drivers} \
-       -D swr-arches=avx,avx2 \
        -D dri3=${_enabled_} \
        -D egl=${_enabled_} \
        -D gallium-extra-hud=true \
@@ -420,7 +422,7 @@ build () {
        -D shared-glapi=${_enabled_} \
        -D opengl=true \
        -D zstd=${_enabled_} \
-       -D valgrind=${_enabled_} $_microsoft_clc $_layers $_no_lto $_additional_meson_flags
+       -D valgrind=${_enabled_} $_legacy_switches $_microsoft_clc $_layers $_no_lto $_additional_meson_flags
        
     meson configure _build64
 
@@ -459,7 +461,6 @@ build () {
           -D dri-drivers=${_dri_drivers} \
           -D gallium-drivers=${_gallium_drivers} \
           -D vulkan-drivers=${_vulkan_drivers} \
-          -D swr-arches=avx,avx2 \
           -D dri3=${_enabled_} \
           -D egl=${_enabled_} \
           -D gallium-extra-hud=true \
@@ -481,7 +482,7 @@ build () {
           -D osmesa=${_osmesa} \
           -D shared-glapi=${_enabled_} \
           -D zstd=${_enabled_} \
-          -D valgrind=${_disabled_} $_microsoft_clc $_layers $_no_lto $_additional_meson_flags
+          -D valgrind=${_disabled_} $_legacy_switches $_microsoft_clc $_layers $_no_lto $_additional_meson_flags
        
       meson configure _build32
 
