@@ -28,6 +28,11 @@ if [ -e "$_EXT_CONFIG_PATH" ]; then
   source "$_EXT_CONFIG_PATH" && msg2 "External configuration file $_EXT_CONFIG_PATH will be used to override customization.cfg values.\n"
 fi
 
+# dri drivers moved to the amber branch
+if [ "$_mesa_branch" = "main" ]; then
+  _dri_drivers=""
+fi
+
 pkgname=('mesa-tkg-git')
 if [ "$_lib32" == "true" ]; then
   pkgname+=('lib32-mesa-tkg-git')
@@ -41,7 +46,7 @@ else
 fi
 
 pkgdesc="an open-source implementation of the OpenGL specification, git version"
-pkgver=22.0.0_devel.147902.c50bdacbda6
+pkgver=22.0.0_devel.147967.9ff086052ab
 pkgrel=1
 arch=('x86_64')
 makedepends=('git' 'python-mako' 'xorgproto' 'libxml2' 'libx11' 'libvdpau' 'libva' 'elfutils'
@@ -227,11 +232,6 @@ pkgver() {
 }
 
 prepare() {
-    # dri drivers moved to the amber branch
-    if [ "$_mesa_branch" = "main" ]; then
-      _dri_drivers=""
-    fi
-
     # cleanups
     cd "$srcdir/$_mesa_srcdir"
     git reset --hard HEAD
