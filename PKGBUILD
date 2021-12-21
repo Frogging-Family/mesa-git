@@ -46,7 +46,7 @@ else
 fi
 
 pkgdesc="an open-source implementation of the OpenGL specification, git version"
-pkgver=22.0.0_devel.147967.9ff086052ab
+pkgver=22.0.0_devel.148233.2686c5419d6
 pkgrel=1
 arch=('x86_64')
 makedepends=('git' 'python-mako' 'xorgproto' 'libxml2' 'libx11' 'libvdpau' 'libva' 'elfutils'
@@ -368,7 +368,9 @@ build () {
 
     # osmesa post ee802372
     if ( cd "$srcdir/$_mesa_srcdir" && git merge-base --is-ancestor ee802372180a2b4460cc7abb53438e45c6b6f1e4 HEAD ); then
-      _osmesa="true"
+      if [ "$_osmesa" != "false" ]; then
+        _osmesa="true"
+      fi
     else
       _osmesa="gallium"
     fi
