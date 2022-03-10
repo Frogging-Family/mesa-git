@@ -46,7 +46,7 @@ else
 fi
 
 pkgdesc="an open-source implementation of the OpenGL specification, git version"
-pkgver=22.0.0_devel.148233.2686c5419d6
+pkgver=0
 pkgrel=1
 arch=('x86_64')
 makedepends=('git' 'python-mako' 'xorgproto' 'libxml2' 'libx11' 'libvdpau' 'libva' 'elfutils'
@@ -97,6 +97,10 @@ sha512sums=('SKIP'
             'c7dbb390ebde291c517a854fcbe5166c24e95206f768cc9458ca896b2253aabd6df12a7becf831998721b2d622d0c02afdd8d519e77dea8e1d6807b35f0166fe')
 
 function exit_cleanup {
+  if [ "$pkgver" != "0" ]; then
+    sed -i "s/pkgver=$pkgver.*/pkgver=0/g" "$_where"/PKGBUILD
+  fi
+
   # Remove temporarily copied patches
   sleep 1 # Workarounds a race condition with ninja
   rm -rf "$_where"/*.mymesa*
