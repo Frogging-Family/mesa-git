@@ -306,9 +306,9 @@ prepare() {
 
 build () {
     if [ -n "$_custom_opt_flags" ]; then
-      export CFLAGS="${CFLAGS} ${_custom_opt_flags}"
-      export CPPFLAGS="${CPPFLAGS} ${_custom_opt_flags}"
-      export CXXFLAGS="${CXXFLAGS} ${_custom_opt_flags}"
+      export CFLAGS="${_custom_opt_flags}"
+      export CPPFLAGS="${_custom_opt_flags}"
+      export CXXFLAGS="${_custom_opt_flags}"
     fi
     if [ "$_no_lto" == "true" ]; then
       export _no_lto="-D b_lto=false"
