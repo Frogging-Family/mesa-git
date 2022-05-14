@@ -393,7 +393,7 @@ build () {
     # /Selector fixes
 
     if [ -n "${CUSTOM_GCC_PATH}" ] && [ "$_compiler" != "clang" ]; then
-      PATH="${CUSTOM_GCC_PATH}/bin:${CUSTOM_GCC_PATH}/lib:${CUSTOM_GCC_PATH}/include:${PATH}"
+      export PATH=$( find "$CUSTOM_GCC_PATH/" -maxdepth 1 -printf "%p:" || ( warning "Custom compiler path seems wrong.." && exit 1 ) )${PATH}
       msg2 "CUSTOM_GCC_PATH = ${CUSTOM_GCC_PATH}"
     fi
 
