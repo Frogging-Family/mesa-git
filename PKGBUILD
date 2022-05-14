@@ -379,6 +379,11 @@ build () {
       _osmesa="gallium"
     fi
 
+    # optional codecs after 7ab05e3
+    if ( cd "$srcdir/$_mesa_srcdir" && git merge-base --is-ancestor 7ab05e3c3fe34ea7f8d7345b9229c163e42c3600 HEAD ); then
+      _optional_codecs="-D video-codecs=${_codecs}"
+    fi
+
     # layer selector
     if ( cd "$srcdir/$_mesa_srcdir" && git merge-base --is-ancestor 54fe5b0482df0f066384b274796d4081c2a1968c HEAD ); then
       _layers="-D vulkan-layers=device-select,overlay"
@@ -428,7 +433,7 @@ build () {
        -D shared-glapi=${_enabled_} \
        -D opengl=true \
        -D zstd=auto \
-       -D valgrind=${_enabled_} $_legacy_switches $_microsoft_clc $_layers $_no_lto $_additional_meson_flags
+       -D valgrind=${_enabled_} $_legacy_switches $_microsoft_clc $_layers $_optional_codecs $_no_lto $_additional_meson_flags
        
     meson configure _build64
 
@@ -488,7 +493,7 @@ build () {
           -D osmesa=${_osmesa} \
           -D shared-glapi=${_enabled_} \
           -D zstd=auto \
-          -D valgrind=${_disabled_} $_legacy_switches $_microsoft_clc $_layers $_no_lto $_additional_meson_flags
+          -D valgrind=${_disabled_} $_legacy_switches $_microsoft_clc $_layers $_optional_codecs $_no_lto $_additional_meson_flags
        
       meson configure _build32
 
