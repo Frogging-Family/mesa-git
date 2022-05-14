@@ -427,7 +427,7 @@ build () {
        -D osmesa=${_osmesa} \
        -D shared-glapi=${_enabled_} \
        -D opengl=true \
-       -D zstd=${_enabled_} \
+       -D zstd=auto \
        -D valgrind=${_enabled_} $_legacy_switches $_microsoft_clc $_layers $_no_lto $_additional_meson_flags
        
     meson configure _build64
@@ -487,7 +487,7 @@ build () {
           -D lmsensors=${_enabled_} \
           -D osmesa=${_osmesa} \
           -D shared-glapi=${_enabled_} \
-          -D zstd=${_enabled_} \
+          -D zstd=auto \
           -D valgrind=${_disabled_} $_legacy_switches $_microsoft_clc $_layers $_no_lto $_additional_meson_flags
        
       meson configure _build32
