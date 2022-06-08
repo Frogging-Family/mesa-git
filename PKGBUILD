@@ -77,6 +77,10 @@ else
   msg2 "ccache was not found and will not be used\n"
 fi
 
+if [ "$_no_lto" = "true" ]; then
+  _makepkg_options+=('!lto')
+fi
+
 options=(${_makepkg_options[@]})
 
 url="https://www.mesa3d.org"
