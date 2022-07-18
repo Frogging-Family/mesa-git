@@ -24,7 +24,9 @@ _where="$PWD" # track basedir as different Arch based distros are moving srcdir 
 source "$_where"/customization.cfg
 
 # Load external configuration file if present. Available variable values will overwrite customization.cfg ones.
-if [ -e "$_EXT_CONFIG_PATH" ]; then
+if [ -e "$_where/mesa-userpatches/user.cfg" ]; then
+  source "$_where/mesa-userpatches/user.cfg" && msg2 "User.cfg config loaded"
+elif [ -e "$_EXT_CONFIG_PATH" ]; then
   source "$_EXT_CONFIG_PATH" && msg2 "External configuration file $_EXT_CONFIG_PATH will be used to override customization.cfg values.\n"
 fi
 
