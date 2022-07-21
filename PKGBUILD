@@ -237,7 +237,7 @@ esac
 
 pkgver() {
     cd "$_mesa_srcdir"
-    read -r _ver <VERSION
+    _ver=$( cat VERSION )
     echo ${_ver/-/_}.$(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
