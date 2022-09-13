@@ -439,7 +439,7 @@ build () {
        -D shared-glapi=${_enabled_} \
        -D opengl=true \
        -D zstd=auto \
-       -D valgrind=${_enabled_} $_legacy_switches $_microsoft_clc $_layers $_optional_codecs $_no_lto $_additional_meson_flags
+       -D valgrind=${_enabled_} $_legacy_switches $_microsoft_clc $_layers $_optional_codecs $_no_lto $_additional_meson_flags $_additional_meson_flags_64
        
     meson configure _build64
 
@@ -499,7 +499,7 @@ build () {
           -D osmesa=${_osmesa} \
           -D shared-glapi=${_enabled_} \
           -D zstd=auto \
-          -D valgrind=${_disabled_} $_legacy_switches $_microsoft_clc $_layers $_optional_codecs $_no_lto $_additional_meson_flags
+          -D valgrind=${_disabled_} $_legacy_switches $_microsoft_clc $_layers $_optional_codecs $_no_lto $_additional_meson_flags $_additional_meson_flags_32
        
       meson configure _build32
 
