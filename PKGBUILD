@@ -396,6 +396,11 @@ build () {
     else
       _layers="-D vulkan-overlay-layer=true -D vulkan-device-select-layer=true"
     fi
+
+    # intel_hasvk removal for legacy trees
+    if ( cd "$srcdir/$_mesa_srcdir" && ! git merge-base --is-ancestor 50013ca9a57c42114044f593c981bbad8c405cc9 HEAD ); then
+      _vulkan_drivers=$(echo $_vulkan_drivers | sed "s/,intel_hasvk//g" | tr -s " ")
+    fi
     # /Selector fixes
 
     if [ -n "${CUSTOM_GCC_PATH}" ] && [ "$_compiler" != "clang" ]; then
