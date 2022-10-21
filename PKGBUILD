@@ -83,6 +83,10 @@ if [ "$_no_lto" = "true" ]; then
   _makepkg_options+=('!lto')
 fi
 
+if [[ "$_additional_meson_flags" =~ "--buildtype debug" ]]; then
+  _makepkg_options+=('debug !strip')
+fi
+
 options=(${_makepkg_options[@]})
 
 url="https://www.mesa3d.org"
