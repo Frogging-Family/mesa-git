@@ -30,7 +30,7 @@ elif [ -e "$_EXT_CONFIG_PATH" ]; then
   source "$_EXT_CONFIG_PATH" && msg2 "External configuration file $_EXT_CONFIG_PATH will be used to override customization.cfg values.\n"
 fi
 
- $_dri_inc="-D dri-drivers=${_dri_drivers} "
+ _dri_inc="-D dri-drivers=${_dri_drivers} "
 # dri drivers moved to the amber branch
 if [ "$_mesa_branch" = "main" ]; then
   _dri_inc=""
