@@ -428,7 +428,6 @@ build () {
     arch-meson $_mesa_srcdir _build64 \
        -D b_ndebug=true \
        -D platforms=${_platforms} \
-       -D dri-drivers=${_dri_drivers} \
        -D gallium-drivers=${_gallium_drivers} \
        -D vulkan-drivers=${_vulkan_drivers} \
        -D dri3=${_enabled_} \
@@ -488,7 +487,6 @@ build () {
           --libdir=/usr/lib32 \
           -D b_ndebug=true \
           -D platforms=${_platforms} \
-          -D dri-drivers=${_dri_drivers} \
           -D gallium-drivers=${_gallium_drivers} \
           -D vulkan-drivers=${_vulkan_drivers} \
           -D dri3=${_enabled_} \
