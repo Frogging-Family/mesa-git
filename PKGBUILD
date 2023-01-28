@@ -30,9 +30,10 @@ elif [ -e "$_EXT_CONFIG_PATH" ]; then
   source "$_EXT_CONFIG_PATH" && msg2 "External configuration file $_EXT_CONFIG_PATH will be used to override customization.cfg values.\n"
 fi
 
+ _dri_inc="-D dri-drivers=${_dri_drivers} "
 # dri drivers moved to the amber branch
 if [ "$_mesa_branch" = "main" ]; then
-  _dri_drivers=""
+  _dri_inc=""
 fi
 
 pkgname=('mesa-tkg-git')
@@ -428,7 +429,6 @@ build () {
     arch-meson $_mesa_srcdir _build64 \
        -D b_ndebug=true \
        -D platforms=${_platforms} \
-       -D dri-drivers=${_dri_drivers} \
        -D gallium-drivers=${_gallium_drivers} \
        -D vulkan-drivers=${_vulkan_drivers} \
        -D dri3=${_enabled_} \
@@ -452,7 +452,7 @@ build () {
        -D shared-glapi=${_enabled_} \
        -D opengl=true \
        -D zstd=auto \
-       -D valgrind=${_enabled_} $_legacy_switches $_microsoft_clc $_xvmc $_layers $_optional_codecs $_no_lto $_additional_meson_flags $_additional_meson_flags_64
+       -D valgrind=${_enabled_} $_legacy_switches $_dri_inc $_microsoft_clc $_xvmc $_layers $_optional_codecs $_no_lto $_additional_meson_flags $_additional_meson_flags_64
        
     meson configure _build64 --no-pager
 
@@ -488,7 +488,6 @@ build () {
           --libdir=/usr/lib32 \
           -D b_ndebug=true \
           -D platforms=${_platforms} \
-          -D dri-drivers=${_dri_drivers} \
           -D gallium-drivers=${_gallium_drivers} \
           -D vulkan-drivers=${_vulkan_drivers} \
           -D dri3=${_enabled_} \
@@ -511,7 +510,7 @@ build () {
           -D osmesa=${_osmesa} \
           -D shared-glapi=${_enabled_} \
           -D zstd=auto \
-          -D valgrind=${_disabled_} $_legacy_switches $_microsoft_clc $_xvmc $_layers $_optional_codecs $_no_lto $_additional_meson_flags $_additional_meson_flags_32
+          -D valgrind=${_disabled_} $_legacy_switches $_dri_inc $_microsoft_clc $_xvmc $_layers $_optional_codecs $_no_lto $_additional_meson_flags $_additional_meson_flags_32
        
       meson configure _build32 --no-pager
 
