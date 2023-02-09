@@ -30,12 +30,6 @@ elif [ -e "$_EXT_CONFIG_PATH" ]; then
   source "$_EXT_CONFIG_PATH" && msg2 "External configuration file $_EXT_CONFIG_PATH will be used to override customization.cfg values.\n"
 fi
 
- _dri_inc="-D dri-drivers=${_dri_drivers} "
-# dri drivers moved to the amber branch
-if [ "$_mesa_branch" = "main" ]; then
-  _dri_inc=""
-fi
-
 pkgname=('mesa-tkg-git')
 if [ "$_lib32" == "true" ]; then
   pkgname+=('lib32-mesa-tkg-git')
@@ -328,6 +322,12 @@ build () {
     fi
 
     # Selector fixes
+
+    # dri drivers moved to the amber branch
+    if [ "$_mesa_branch" = "amber" ] || ( cd "$srcdir/$_mesa_srcdir" && ! git merge-base --is-ancestor cdde031ac2c8124721655532ee6f4149e20e9c61 HEAD ); then
+      _dri_inc="-D dri-drivers=${_dri_drivers} "
+    fi
+
     # Syntax legacy compat
     if ( cd "$srcdir/$_mesa_srcdir" && git merge-base --is-ancestor 138c003d22739b0d1e6860ed398dd511a44cde04 HEAD ); then
       _enabled_="enabled"
