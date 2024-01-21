@@ -250,7 +250,11 @@ prepare() {
     fi
     msg2 "Tree cleaned"
 
-    cp "$_where"/mesa-userpatches/*.mymesa* "$_where" || true # copy userpatches inside the PKGBUILD's dir
+    # copy userpatches inside the PKGBUILD's dir
+    for _file in "$_where"/mesa-userpatches/*.mymesa*
+    do
+        [ -e "$_file" ] && cp "$_file" "$_where"
+    done
 
     if [ -n "$_mesa_prs" ]; then
       for _pr in ${_mesa_prs[@]}; do
