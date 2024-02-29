@@ -431,6 +431,15 @@ build () {
       fi
       _intel_rt_32="-D intel-rt=disabled"
     fi
+
+    # intel-clc cross compile fix
+    if ( cd "$srcdir/$_mesa_srcdir" && git merge-base --is-ancestor 28c1053c07c177854520f6283fa665f17618adb5 HEAD ); then
+      if [[ "$_lib32" == "true" ]]; then
+         _intel_clc_32="-D intel-clc=system"
+        # Workaround cross compilation error by using intel_clc binary from _build64
+        export PATH=$srcdir/_build64/src/intel/compiler:${PATH}
+      fi
+    fi
     # /Selector fixes
 
     if [ -n "${CUSTOM_GCC_PATH}" ] && [ "$_compiler" != "clang" ]; then
@@ -535,7 +544,7 @@ build () {
           -D osmesa=${_osmesa} \
           -D shared-glapi=${_enabled_} \
           -D zstd=auto \
-          -D valgrind=${_disabled_} $_legacy_switches $_dri_inc $_microsoft_clc $_xvmc $_layers $_optional_codecs $_android_libbacktrace $_intel_rt_32 $_no_lto $_additional_meson_flags $_additional_meson_flags_32
+          -D valgrind=${_disabled_} $_legacy_switches $_dri_inc $_microsoft_clc $_xvmc $_layers $_optional_codecs $_android_libbacktrace $_intel_rt_32 $_intel_clc_32 $_no_lto $_additional_meson_flags $_additional_meson_flags_32
        
       meson configure _build32 --no-pager
 
