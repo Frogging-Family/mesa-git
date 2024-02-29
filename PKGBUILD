@@ -50,13 +50,14 @@ makedepends=('git' 'python-mako' 'python-ply' 'xorgproto' 'libxml2' 'libx11' 'li
              'elfutils' 'libomxil-bellagio' 'libxrandr' 'ocl-icd' 'libgcrypt'  'wayland'
              'wayland-protocols' 'meson' 'ninja' 'libdrm' 'xorgproto' 'libdrm' 'libxshmfence' 
              'libxxf86vm' 'libxdamage' 'libclc' 'libglvnd' 'libunwind' 'lm_sensors' 'libxrandr'
-             'valgrind' 'glslang' 'byacc' 'wget' 'flex' 'bison')
+             'valgrind' 'glslang' 'byacc' 'wget' 'flex' 'bison' 'rust' 'rust-bindgen')
 
 if [ "$_lib32" == "true" ]; then
   makedepends+=('lib32-libxml2' 'lib32-libx11' 'lib32-libdrm' 'lib32-libxshmfence' 'lib32-libxxf86vm'
                 'lib32-gcc-libs' 'lib32-libvdpau' 'lib32-libelf' 'lib32-libgcrypt'
                 'lib32-lm_sensors' 'lib32-libxdamage' 'gcc-multilib' 'lib32-libunwind' 'lib32-libglvnd'
-                'lib32-libva' 'lib32-wayland' 'lib32-libvdpau' 'lib32-libxrandr' 'lib32-expat' 'spirv-llvm-translator')
+                'lib32-libva' 'lib32-wayland' 'lib32-libvdpau' 'lib32-libxrandr' 'lib32-expat'
+                'spirv-llvm-translator' 'lib32-rust-libs')
 fi
 
 depends=('libdrm' 'libxxf86vm' 'libxdamage' 'libxshmfence' 'libelf' 'libomxil-bellagio' 'libunwind'
@@ -446,6 +447,8 @@ build () {
     fi
 
     arch-meson $_mesa_srcdir _build64 \
+       --wrap-mode=nofallback \
+       --force-fallback-for=syn \
        -D b_ndebug=true \
        -D platforms=${_platforms} \
        -D gallium-drivers=${_gallium_drivers} \
@@ -503,8 +506,11 @@ build () {
       export PKG_CONFIG=/usr/bin/i686-pc-linux-gnu-pkg-config
 
       arch-meson $_mesa_srcdir _build32 \
+          --cross-file lib32 \
           --native-file llvm32.native \
           --libdir=/usr/lib32 \
+          --wrap-mode=nofallback \
+          --force-fallback-for=syn \
           -D b_ndebug=true \
           -D platforms=${_platforms} \
           -D gallium-drivers=${_gallium_drivers} \
