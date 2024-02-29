@@ -46,8 +46,8 @@ pkgdesc="an open-source implementation of the OpenGL specification, git version"
 pkgver=0
 pkgrel=1
 arch=('x86_64')
-makedepends=('git' 'python-mako' 'xorgproto' 'libxml2' 'libx11' 'libvdpau' 'libva' 'elfutils'
-             'libomxil-bellagio' 'libxrandr' 'ocl-icd' 'libgcrypt'  'wayland'
+makedepends=('git' 'python-mako' 'python-ply' 'xorgproto' 'libxml2' 'libx11' 'libvdpau' 'libva'
+             'elfutils' 'libomxil-bellagio' 'libxrandr' 'ocl-icd' 'libgcrypt'  'wayland'
              'wayland-protocols' 'meson' 'ninja' 'libdrm' 'xorgproto' 'libdrm' 'libxshmfence' 
              'libxxf86vm' 'libxdamage' 'libclc' 'libglvnd' 'libunwind' 'lm_sensors' 'libxrandr'
              'valgrind' 'glslang' 'byacc' 'wget' 'flex' 'bison')
