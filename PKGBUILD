@@ -46,17 +46,18 @@ pkgdesc="an open-source implementation of the OpenGL specification, git version"
 pkgver=0
 pkgrel=1
 arch=('x86_64')
-makedepends=('git' 'python-mako' 'xorgproto' 'libxml2' 'libx11' 'libvdpau' 'libva' 'elfutils'
-             'libomxil-bellagio' 'libxrandr' 'ocl-icd' 'libgcrypt'  'wayland'
+makedepends=('git' 'python-mako' 'python-ply' 'xorgproto' 'libxml2' 'libx11' 'libvdpau' 'libva'
+             'elfutils' 'libomxil-bellagio' 'libxrandr' 'ocl-icd' 'libgcrypt'  'wayland'
              'wayland-protocols' 'meson' 'ninja' 'libdrm' 'xorgproto' 'libdrm' 'libxshmfence' 
              'libxxf86vm' 'libxdamage' 'libclc' 'libglvnd' 'libunwind' 'lm_sensors' 'libxrandr'
-             'valgrind' 'glslang' 'byacc' 'wget' 'flex' 'bison')
+             'valgrind' 'glslang' 'byacc' 'wget' 'flex' 'bison' 'rust' 'rust-bindgen')
 
 if [ "$_lib32" == "true" ]; then
   makedepends+=('lib32-libxml2' 'lib32-libx11' 'lib32-libdrm' 'lib32-libxshmfence' 'lib32-libxxf86vm'
                 'lib32-gcc-libs' 'lib32-libvdpau' 'lib32-libelf' 'lib32-libgcrypt'
                 'lib32-lm_sensors' 'lib32-libxdamage' 'gcc-multilib' 'lib32-libunwind' 'lib32-libglvnd'
-                'lib32-libva' 'lib32-wayland' 'lib32-libvdpau' 'lib32-libxrandr' 'lib32-expat' 'spirv-llvm-translator')
+                'lib32-libva' 'lib32-wayland' 'lib32-libvdpau' 'lib32-libxrandr' 'lib32-expat'
+                'spirv-llvm-translator' 'lib32-rust-libs')
 fi
 
 depends=('libdrm' 'libxxf86vm' 'libxdamage' 'libxshmfence' 'libelf' 'libomxil-bellagio' 'libunwind'
@@ -430,6 +431,15 @@ build () {
       fi
       _intel_rt_32="-D intel-rt=disabled"
     fi
+
+    # intel-clc cross compile fix
+    if ( cd "$srcdir/$_mesa_srcdir" && git merge-base --is-ancestor 28c1053c07c177854520f6283fa665f17618adb5 HEAD ); then
+      if [[ "$_lib32" == "true" ]]; then
+         _intel_clc_32="-D intel-clc=system"
+        # Workaround cross compilation error by using intel_clc binary from _build64
+        export PATH=$srcdir/_build64/src/intel/compiler:${PATH}
+      fi
+    fi
     # /Selector fixes
 
     if [ -n "${CUSTOM_GCC_PATH}" ] && [ "$_compiler" != "clang" ]; then
@@ -446,6 +456,8 @@ build () {
     fi
 
     arch-meson $_mesa_srcdir _build64 \
+       --wrap-mode=nofallback \
+       --force-fallback-for=syn \
        -D b_ndebug=true \
        -D platforms=${_platforms} \
        -D gallium-drivers=${_gallium_drivers} \
@@ -503,8 +515,11 @@ build () {
       export PKG_CONFIG=/usr/bin/i686-pc-linux-gnu-pkg-config
 
       arch-meson $_mesa_srcdir _build32 \
+          --cross-file lib32 \
           --native-file llvm32.native \
           --libdir=/usr/lib32 \
+          --wrap-mode=nofallback \
+          --force-fallback-for=syn \
           -D b_ndebug=true \
           -D platforms=${_platforms} \
           -D gallium-drivers=${_gallium_drivers} \
@@ -529,7 +544,7 @@ build () {
           -D osmesa=${_osmesa} \
           -D shared-glapi=${_enabled_} \
           -D zstd=auto \
-          -D valgrind=${_disabled_} $_legacy_switches $_dri_inc $_microsoft_clc $_xvmc $_layers $_optional_codecs $_android_libbacktrace $_intel_rt_32 $_no_lto $_additional_meson_flags $_additional_meson_flags_32
+          -D valgrind=${_disabled_} $_legacy_switches $_dri_inc $_microsoft_clc $_xvmc $_layers $_optional_codecs $_android_libbacktrace $_intel_rt_32 $_intel_clc_32 $_no_lto $_additional_meson_flags $_additional_meson_flags_32
        
       meson configure _build32 --no-pager
 
