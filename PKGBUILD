@@ -457,7 +457,7 @@ build () {
 
     arch-meson $_mesa_srcdir _build64 \
        --wrap-mode=nofallback \
-       --force-fallback-for=syn \
+       --force-fallback-for=syn,paste \
        -D b_ndebug=true \
        -D platforms=${_platforms} \
        -D gallium-drivers=${_gallium_drivers} \
@@ -519,7 +519,7 @@ build () {
           --native-file llvm32.native \
           --libdir=/usr/lib32 \
           --wrap-mode=nofallback \
-          --force-fallback-for=syn \
+          --force-fallback-for=syn,paste \
           -D b_ndebug=true \
           -D platforms=${_platforms} \
           -D gallium-drivers=${_gallium_drivers} \
