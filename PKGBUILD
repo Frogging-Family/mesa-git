@@ -475,7 +475,7 @@ build () {
        -D gbm=${_enabled_} \
        -D gles1=${_disabled_} \
        -D gles2=${_enabled_} \
-       -D glvnd=true \
+       -D glvnd=${_enabled_} \
        -D glx=dri \
        -D libunwind=${_enabled_} \
        -D llvm=${_enabled_} \
@@ -537,7 +537,7 @@ build () {
           -D gbm=${_enabled_} \
           -D gles1=${_disabled_} \
           -D gles2=${_enabled_} \
-          -D glvnd=true \
+          -D glvnd=${_enabled_} \
           -D glx=dri \
           -D libunwind=${_disabled_} \
           -D llvm=${_enabled_} \
