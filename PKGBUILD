@@ -522,6 +522,7 @@ build () {
         export CXX="g++ -m32"
       fi
       export PKG_CONFIG=/usr/bin/i686-pc-linux-gnu-pkg-config
+      export BINDGEN_EXTRA_CLANG_ARGS="--target=i686-unknown-linux-gnu"
 
       arch-meson $_mesa_srcdir _build32 \
           --cross-file lib32 \
