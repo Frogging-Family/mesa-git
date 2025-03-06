@@ -26,8 +26,8 @@ source "$_where"/customization.cfg
 # Load variables from override configuration file if present.
 if [ -e "$_where/override.cfg" ]; then
   source "$_where/override.cfg" && msg2 "override.cfg config loaded"
-elif [ -e "$_EXT_CONFIG_PATH" ]; then
-  source "$_EXT_CONFIG_PATH" && msg2 "External override file $_EXT_CONFIG_PATH will be used to override customization.cfg values.\n"
+elif [ -e "$CONFIG_OVERRIDE_PATH" ]; then
+  source "$CONFIG_OVERRIDE_PATH" && msg2 "External override file $CONFIG_OVERRIDE_PATH will be used to override customization.cfg values.\n"
 fi
 
 # custom mesa commit to pass to git
