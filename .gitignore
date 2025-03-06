@@ -13,8 +13,10 @@
 *.old
 *.db
 *.files
-*.mymesapatch
+*.patch
 src/
 pkg/
 mesa-aco/
 mesa/
+userpatches/*
+override.cfg
