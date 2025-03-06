@@ -145,7 +145,7 @@ if [[ "$_lib32" == "true" ]]; then
   )
 
   if [[ "$_compiler" == "gcc" ]]; then
-    _depends64+=('lib32-gcc-libs')
+    _depends32+=('lib32-gcc-libs')
   fi
 
   pkgname+=('lib32-mesa-tkg-git')
