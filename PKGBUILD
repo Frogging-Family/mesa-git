@@ -535,7 +535,6 @@ build () {
         -D lmsensors=enabled \
         -D microsoft-clc=disabled \
         -D platforms=x11,wayland \
-        -D shared-glapi=enabled \
         -D video-codecs=all \
         -D vulkan-layers=device-select,overlay \
         -D tools=[] \
@@ -589,7 +588,6 @@ build () {
         -D libunwind=enabled \
         -D llvm=enabled \
         -D lmsensors=enabled \
-        -D shared-glapi=enabled \
         -D valgrind=disabled \
         -D tools=[] \
         -D zstd=enabled \
