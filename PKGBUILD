@@ -492,9 +492,9 @@ build () {
       export CXX="g++"
     fi
 
-
-DEPRECATION: Option 'gallium-opencl' is deprecated
-
+    if [ "$_rusticl" = "true" ]; then
+      _rusticladditions="-D rust_std=2021 -D llvm=enabled"
+    fi
 
     arch-meson $_mesa_srcdir _build64 \
        --wrap-mode=nofallback \
@@ -505,6 +505,7 @@ DEPRECATION: Option 'gallium-opencl' is deprecated
        -D vulkan-drivers=${_vulkan_drivers} \
        -D egl=${_enabled_} \
        -D gallium-extra-hud=true \
+       -D gallium-rusticl=${_rusticl} \
        -D gallium-va=${_gallium_va} \
        -D gallium-vdpau=${_gallium_vdpau} \
        -D gbm=${_enabled_} \
@@ -517,7 +518,7 @@ DEPRECATION: Option 'gallium-opencl' is deprecated
        -D lmsensors=${_enabled_} \
        -D opengl=true \
        -D zstd=auto \
-       -D valgrind=${_enabled_} $_legacy_switches $_dri3 $_omx $_dri_inc $_microsoft_clc $_osmesa $_xvmc $_layers $_optional_codecs $_android_libbacktrace $_intel_rt $_galliumnine $_galliumxa $_sharedglapi $_galliumopencl $_no_lto $_additional_meson_flags $_additional_meson_flags_64
+       -D valgrind=${_enabled_} $_legacy_switches $_dri3 $_omx $_dri_inc $_microsoft_clc $_osmesa $_xvmc $_layers $_optional_codecs $_android_libbacktrace $_intel_rt $_galliumnine $_galliumxa $_sharedglapi $_galliumopencl $_rusticladditions $_no_lto $_additional_meson_flags $_additional_meson_flags_64
        
     meson configure _build64 --no-pager
 
@@ -561,6 +562,7 @@ DEPRECATION: Option 'gallium-opencl' is deprecated
           -D vulkan-drivers=${_vulkan_drivers} \
           -D egl=${_enabled_} \
           -D gallium-extra-hud=true \
+          -D gallium-rusticl=${_rusticl} \
           -D gallium-va=${_gallium_va} \
           -D gallium-vdpau=${_gallium_vdpau} \
           -D gbm=${_enabled_} \
@@ -573,7 +575,7 @@ DEPRECATION: Option 'gallium-opencl' is deprecated
           -D lmsensors=${_enabled_} \
           -D shared-glapi=${_enabled_} \
           -D zstd=auto \
-          -D valgrind=${_disabled_} $_legacy_switches $_dri3 $_omx_32 $_dri_inc $_microsoft_clc $_osmesa $_xvmc $_layers $_optional_codecs $_android_libbacktrace $_intel_rt_32 $_intel_clc_32 $_galliumnine $_galliumxa $_sharedglapi $_galliumopencl $_no_lto $_additional_meson_flags $_additional_meson_flags_32
+          -D valgrind=${_disabled_} $_legacy_switches $_dri3 $_omx_32 $_dri_inc $_microsoft_clc $_osmesa $_xvmc $_layers $_optional_codecs $_android_libbacktrace $_intel_rt_32 $_intel_clc_32 $_galliumnine $_galliumxa $_sharedglapi $_galliumopencl $_rusticladditions $_no_lto $_additional_meson_flags $_additional_meson_flags_32
        
       meson configure _build32 --no-pager
 
