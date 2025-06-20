@@ -79,7 +79,7 @@ else
   msg2 "ccache was not found and will not be used\n"
 fi
 
-if [ "$_no_lto" = "true" ]; then
+if [ "$_lto" != "true" ]; then
   _makepkg_options+=('!lto')
 fi
 
@@ -324,10 +324,10 @@ build () {
       export CPPFLAGS="${_custom_opt_flags}"
       export CXXFLAGS="${_custom_opt_flags}"
     fi
-    if [ "$_no_lto" == "true" ]; then
-      export _no_lto="-D b_lto=false"
+    if [ "$_lto" != "true" ]; then
+      export _lto="-D b_lto=false"
     else
-      export _no_lto=""
+      export _lto="-D b_lto=true"
     fi
 
     # Selector fixes
@@ -526,7 +526,7 @@ build () {
        -D lmsensors=${_enabled_} \
        -D opengl=true \
        -D zstd=auto \
-       -D valgrind=${_enabled_} $_legacy_switches $_dri3 $_omx $_dri_inc $_microsoft_clc $_osmesa $_xvmc $_layers $_optional_codecs $_android_libbacktrace $_intel_rt $_galliumnine $_galliumxa $_sharedglapi $_galliumopencl $_mediafoundation $_rusticladditions $_no_lto $_additional_meson_flags $_additional_meson_flags_64
+       -D valgrind=${_enabled_} $_legacy_switches $_dri3 $_omx $_dri_inc $_microsoft_clc $_osmesa $_xvmc $_layers $_optional_codecs $_android_libbacktrace $_intel_rt $_galliumnine $_galliumxa $_sharedglapi $_galliumopencl $_mediafoundation $_rusticladditions $_lto $_additional_meson_flags $_additional_meson_flags_64
        
     meson configure _build64 --no-pager
 
@@ -583,7 +583,7 @@ build () {
           -D lmsensors=${_enabled_} \
           -D shared-glapi=${_enabled_} \
           -D zstd=auto \
-          -D valgrind=${_disabled_} $_legacy_switches $_dri3 $_omx_32 $_dri_inc $_microsoft_clc $_osmesa $_xvmc $_layers $_optional_codecs $_android_libbacktrace $_intel_rt_32 $_intel_clc_32 $_galliumnine $_galliumxa $_sharedglapi $_galliumopencl $_mediafoundation $_rusticladditions $_no_lto $_additional_meson_flags $_additional_meson_flags_32
+          -D valgrind=${_disabled_} $_legacy_switches $_dri3 $_omx_32 $_dri_inc $_microsoft_clc $_osmesa $_xvmc $_layers $_optional_codecs $_android_libbacktrace $_intel_rt_32 $_intel_clc_32 $_galliumnine $_galliumxa $_sharedglapi $_galliumopencl $_mediafoundation $_rusticladditions $_lto $_additional_meson_flags $_additional_meson_flags_32
        
       meson configure _build32 --no-pager
 
