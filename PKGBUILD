@@ -338,7 +338,7 @@ build () {
         warning "Enabling LTO on GCC is known to create issues with mesa. Consider using Clang instead of GCC."
       fi
       # With LTO, we'll hit `too many open files` if the limit is too low, so let's use some bif enough value for our current shell
-      ulimit -Sn 2048
+      ulimit -Sn 4096
     fi
 
     # Selector fixes
