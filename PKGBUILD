@@ -299,6 +299,12 @@ prepare() {
 
     cd "$srcdir"
 
+    if [ "$_compiler" = "clang" ]; then
+      echo "_compiler=clang" > "$_where"/frogminer
+    else
+      echo "_compiler=gcc" > "$_where"/frogminer
+    fi
+
     # although removing _build folder in build() function feels more natural,
     # that interferes with the spirit of makepkg --noextract
     if [  -d _build64 ] && [ "$_NUKR" != "false" ]; then
@@ -486,6 +492,8 @@ build () {
     fi
 
     # /Selector fixes
+
+    source "$_where"/frogminer
 
     if [ -n "${CUSTOM_GCC_PATH}" ] && [ "$_compiler" != "clang" ]; then
       export PATH=$( find "$CUSTOM_GCC_PATH/" -maxdepth 1 -printf "%p:" || ( warning "Custom compiler path seems wrong.." && exit 1 ) )${PATH}
