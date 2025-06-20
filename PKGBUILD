@@ -563,11 +563,18 @@ build () {
         export CC="gcc -m32"
         export CXX="g++ -m32"
       fi
+
+      if [ "$_rusticl32_bypass" != "true" ]; then
+        _rusticl_32="false"
+      else
+        _rusticl_32="$_rusticl"
+        _crossfile_flag="--cross-file lib32"
+      fi
+
       export PKG_CONFIG=/usr/bin/i686-pc-linux-gnu-pkg-config
       export BINDGEN_EXTRA_CLANG_ARGS="--target=i686-unknown-linux-gnu"
 
-      arch-meson $_mesa_srcdir _build32 \
-          --cross-file lib32 \
+      arch-meson $_mesa_srcdir _build32 $_crossfile_flag \
           --native-file llvm32.native \
           --libdir=/usr/lib32 \
           --wrap-mode=nofallback \
@@ -578,7 +585,7 @@ build () {
           -D vulkan-drivers=${_vulkan_drivers} \
           -D egl=${_enabled_} \
           -D gallium-extra-hud=true \
-          -D gallium-rusticl=${_rusticl} \
+          -D gallium-rusticl=${_rusticl_32} \
           -D gallium-va=${_gallium_va} \
           -D gallium-vdpau=${_gallium_vdpau} \
           -D gbm=${_enabled_} \
