@@ -581,7 +581,6 @@ build () {
           -D libunwind=${_disabled_} \
           -D llvm=${_enabled_} \
           -D lmsensors=${_enabled_} \
-          -D shared-glapi=${_enabled_} \
           -D zstd=auto \
           -D valgrind=${_disabled_} $_legacy_switches $_dri3 $_omx_32 $_dri_inc $_microsoft_clc $_osmesa $_xvmc $_layers $_optional_codecs $_android_libbacktrace $_intel_rt_32 $_intel_clc_32 $_galliumnine $_galliumxa $_sharedglapi $_galliumopencl $_mediafoundation $_rusticladditions $_lto $_additional_meson_flags $_additional_meson_flags_32
        
