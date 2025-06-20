@@ -334,6 +334,9 @@ build () {
       export _lto="-D b_lto=false"
     else
       export _lto="-D b_lto=true"
+      if [ "$_compiler" != "clang" ]; then
+        warning "Enabling LTO on GCC is known to create issues with mesa. Consider using Clang instead of GCC."
+      fi
     fi
 
     # Selector fixes
