@@ -562,6 +562,10 @@ build () {
     if [ "$_lib32" == "true" ]; then
       cd "$srcdir"
       if [ "$_compiler" = "clang" ]; then
+        if [ "$_rusticl32_bypass" = "true" ]; then
+          warning "LTO forcefully disabled on lib32 because _rusticl32_bypass=\"true\""
+          _lto="-D b_lto=false"
+        fi
         export CC="clang -m32"
         export CXX="clang++ -m32"
       else
