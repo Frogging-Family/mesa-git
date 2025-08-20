@@ -420,7 +420,7 @@ build () {
     fi
 
     # layer selector
-    if ( cd "$srcdir/$_mesa_srcdir" && git merge-base --is-ancestor 722ffe9a739152626894acf4b1248f8848b88b96 HEAD ); then
+    if ( cd "$srcdir/$_mesa_srcdir" && git merge-base --is-ancestor 722ffe9a739152626894acf4b1248f8848b88b96 HEAD ) && [ "$_antilag" = "true" ]; then
       if ( cd "$srcdir/$_mesa_srcdir" && git merge-base --is-ancestor 54fe5b0482df0f066384b274796d4081c2a1968c HEAD ); then
         _layers="-D vulkan-layers=device-select,overlay,anti-lag"
       else
