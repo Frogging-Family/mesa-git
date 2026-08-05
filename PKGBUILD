@@ -529,7 +529,7 @@ build () {
 
     arch-meson $_mesa_srcdir _build64 \
        --wrap-mode=nofallback \
-       --force-fallback-for=syn,paste,rustc-hash \
+       --force-fallback-for=syn,paste,rustc-hash,venus-protocol \
        -D b_ndebug=true \
        -D platforms=${_platforms} \
        -D gallium-drivers=${_gallium_drivers} \
@@ -600,7 +600,7 @@ build () {
           ${_crossfile_flag} \
           --libdir=/usr/lib32 \
           --wrap-mode=nofallback \
-          --force-fallback-for=syn,paste,rustc-hash \
+          --force-fallback-for=syn,paste,rustc-hash,venus-protocol \
           -D b_ndebug=true \
           -D platforms=${_platforms} \
           -D gallium-drivers=${_gallium_drivers} \
